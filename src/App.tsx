@@ -1,24 +1,12 @@
 import React from 'react'
-import styled, { keyframes } from 'styled-components'
-
-const Title = styled.span`
-  color: tomato;
-`
-
-const Wrapper = styled.div`
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: ${(props) => props.theme.backgroundColor};
-`
+import Circle from './Circle'
 
 function App() {
   return (
-    <Wrapper>
-      <Title>Hello</Title>
-    </Wrapper>
+    <div>
+      <Circle bgColor={'teal'} />
+      <Circle bgColor={'tomato'} />
+    </div>
   )
 }
 
