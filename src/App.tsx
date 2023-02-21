@@ -1,7 +1,8 @@
+import React from 'react'
 import styled, { keyframes } from 'styled-components'
 
-const Title = styled.h1`
-  color: ${(props) => props.theme.textColor};
+const Title = styled.span`
+  color: tomato;
 `
 
 const Wrapper = styled.div`

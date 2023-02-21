@@ -13,7 +13,7 @@ const lightTheme = {
   backgroundColor: 'whitesmoke',
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'))
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>
     {/* 우리의 앱이 ThemeProvider 안에 있기 때문에, 우리의 component들이 색에 접근가능 */}
