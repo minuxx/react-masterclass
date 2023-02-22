@@ -23,15 +23,22 @@ const Coin = styled.li`
   margin-bottom: 10px;
   border-radius: 15px;
   a {
+    display: flex;
+    align-items: center;
     padding: 20px;
     transition: color 0.2s ease-in;
-    display: block;
   }
   &:hover {
     a {
       color: ${(props) => props.theme.accentColor};
     }
   }
+`
+
+const Img = styled.img`
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
 `
 
 const Title = styled.h1`
@@ -79,7 +86,17 @@ function Coins() {
         <CoinList>
           {coins.map((coin) => (
             <Coin key={coin.id}>
-              <Link to={`/${coin.id}`}>{coin.name} &rarr;</Link>
+              <Link
+                to={{
+                  pathname: `/${coin.id}`,
+                  state: { name: coin.name },
+                }}
+              >
+                <Img
+                  src={`https://cryptocurrencyliveprices.com/img/${coin.id}.png`}
+                />
+                {coin.name} &rarr;
+              </Link>
             </Coin>
           ))}
         </CoinList>
