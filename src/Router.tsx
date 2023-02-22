@@ -6,7 +6,6 @@ function Router() {
   return (
     <BrowserRouter>
       <Switch>
-        {/* /: Router 에게 우리의 URL이 변수값을 갖는다는 것을 말해주는 방식 */}
         <Route path="/:coinId">
           <Coin />
         </Route>
