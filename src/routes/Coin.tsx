@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import {
   Link,
@@ -10,7 +9,7 @@ import {
 } from 'react-router-dom'
 import styled from 'styled-components'
 import { fetchCoinInfo, fetchCoinTickers } from '../api'
-import Chart from './Char'
+import Chart from './Chart'
 import Price from './Price'
 
 const Container = styled.div`
@@ -213,7 +212,7 @@ function Coin() {
               <Price />
             </Route>
             <Route path={`/${coinId}/chart`}>
-              <Chart />
+              <Chart coinId={coinId} />
             </Route>
           </Switch>
         </>
