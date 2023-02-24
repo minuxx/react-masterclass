@@ -52,13 +52,6 @@ const BackBtn = styled.div`
   }
 `
 
-const ToggleSwitchWarapper = styled.div`
-  display: flex;
-  align-items: flex-end;
-  flex-direction: column;
-  padding: 12px 0px;
-`
-
 const Loader = styled.span`
   text-align: center;
   display: block;
@@ -154,23 +147,13 @@ interface IPriceData {
   last_updated: string
   quotes: {
     USD: {
-      ath_date: string
-      ath_price: number
-      market_cap: number
-      market_cap_change_24h: number
-      percent_change_1h: number
-      percent_change_1y: number
-      percent_change_6h: number
-      percent_change_7d: number
-      percent_change_12h: number
-      percent_change_15m: number
-      percent_change_24h: number
-      percent_change_30d: number
-      percent_change_30m: number
-      percent_from_price_ath: number
       price: number
+      market_cap: number
       volume_24h: number
-      volume_24h_change_24h: number
+      percent_change_1h: number
+      percent_change_6h: number
+      percent_change_12h: number
+      percent_change_24h: number
     }
   }
 }
@@ -187,10 +170,7 @@ function Coin() {
   )
   const { isLoading: tickersLoading, data: tickersData } = useQuery<IPriceData>(
     ['tickers', coinId],
-    () => fetchCoinTickers(coinId),
-    {
-      refetchInterval: 5000,
-    }
+    () => fetchCoinTickers(coinId)
   )
 
   const loading = infoLoading || tickersLoading
@@ -209,10 +189,8 @@ function Coin() {
         <Title>
           {state?.name ? state.name : loading ? 'Loading...' : infoData?.name}
         </Title>
-      </Header>
-      <ToggleSwitchWarapper>
         <ToggleSwitch onToggle={context.toggleTheme} />
-      </ToggleSwitchWarapper>
+      </Header>
 
       {loading ? (
         <Loader>Loading...</Loader>
@@ -255,7 +233,7 @@ function Coin() {
 
           <Switch>
             <Route path={`/${coinId}/price`}>
-              <Price />
+              <Price coinId={coinId} />
             </Route>
             <Route path={`/${coinId}/chart`}>
               <Chart coinId={coinId} />

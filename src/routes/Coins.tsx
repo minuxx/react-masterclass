@@ -15,16 +15,10 @@ const Container = styled.div`
 
 const Header = styled.header`
   height: 10vh;
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 50px 1fr 50px;
+  grid-gap: 20px;
   align-items: center;
-`
-
-const ToggleSwitchWarapper = styled.div`
-  display: flex;
-  align-items: flex-end;
-  flex-direction: column;
-  padding: 12px 0px;
 `
 
 const CoinList = styled.ul``
@@ -84,11 +78,10 @@ function Coins() {
         <title>Crypto Tracker</title>
       </Helmet>
       <Header>
+        <span></span>
         <Title>Crypto Tracker</Title>
-      </Header>
-      <ToggleSwitchWarapper>
         <ToggleSwitch onToggle={context.toggleTheme} />
-      </ToggleSwitchWarapper>
+      </Header>
 
       {isLoading ? (
         <Loader>Loading...</Loader>
