@@ -24,9 +24,32 @@ const Container = styled.div`
 
 const Header = styled.header`
   height: 10vh;
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 30px 1fr 30px;
+  grid-gap: 20px;
   align-items: center;
+`
+
+const Title = styled.h1`
+  text-align: center;
+  font-size: 48px;
+  color: ${(props) => props.theme.accentColor};
+`
+
+const BackBtn = styled.div`
+  a {
+    font-size: 14px;
+    display: flex;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    background-color: ${(props) => props.theme.btnBgColor};
+    border-radius: 50%;
+    border: 1px solid transparent;
+    color: ${(props) => props.theme.bgColor};
+    padding-top: 2px;
+    padding-right: 2px;
+  }
 `
 
 const ToggleSwitchWarapper = styled.div`
@@ -34,11 +57,6 @@ const ToggleSwitchWarapper = styled.div`
   align-items: flex-end;
   flex-direction: column;
   padding: 12px 0px;
-`
-
-const Title = styled.h1`
-  font-size: 48px;
-  color: ${(props) => props.theme.accentColor};
 `
 
 const Loader = styled.span`
@@ -185,6 +203,9 @@ function Coin() {
         </title>
       </Helmet>
       <Header>
+        <BackBtn>
+          <Link to="/">〈</Link>
+        </BackBtn>
         <Title>
           {state?.name ? state.name : loading ? 'Loading...' : infoData?.name}
         </Title>
