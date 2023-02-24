@@ -1,6 +1,9 @@
-import { createGlobalStyle } from 'styled-components'
+import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import Router from './Router'
 import { ReactQueryDevtools } from 'react-query/devtools'
+import { darkTheme, lightTheme } from './theme'
+import { useState } from 'react'
+import { ThemeContext } from './contexts'
 
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500&display=swap');html, body, div, span, applet, object, iframe,
@@ -61,12 +64,24 @@ const GlobalStyle = createGlobalStyle`
 `
 
 function App() {
+  const [themeMode, setThemeMode] = useState(
+    window.localStorage.getItem('themeMode') || 'light'
+  )
+
+  const toggleTheme = () => {
+    const newThemeMode = themeMode === 'light' ? 'dark' : 'light'
+    window.localStorage.setItem('themeMode', newThemeMode)
+    setThemeMode(newThemeMode)
+  }
+
   return (
-    <>
-      <GlobalStyle />
-      <Router />
-      <ReactQueryDevtools initialIsOpen={true} />
-    </>
+    <ThemeContext.Provider value={{ themeMode, toggleTheme }}>
+      <ThemeProvider theme={themeMode === 'light' ? lightTheme : darkTheme}>
+        <GlobalStyle />
+        <Router />
+        <ReactQueryDevtools initialIsOpen={true} />
+      </ThemeProvider>
+    </ThemeContext.Provider>
   )
 }
 

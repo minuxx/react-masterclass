@@ -10,5 +10,9 @@ declare module 'styled-components' {
     textColor: string
     bgColor: string
     accentColor: string
+    toggleBtnColor: string
+    coinItemBgColor: string
+    overviewBgColor: string
+    tabBgColor: string
   }
 }

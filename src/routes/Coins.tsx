@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { Helmet } from 'react-helmet'
 import { fetchCoins } from '../api'
+import ToggleSwitch from '../components/ToggleSwitch'
+import { useContext } from 'react'
+import { ThemeContext } from '../contexts'
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -18,10 +20,17 @@ const Header = styled.header`
   align-items: center;
 `
 
+const ToggleSwitchWarapper = styled.div`
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  padding: 12px 0px;
+`
+
 const CoinList = styled.ul``
 
 const Coin = styled.li`
-  background-color: white;
+  background-color: ${(props) => props.theme.coinItemBgColor};
   color: ${(props) => props.theme.bgColor};
   margin-bottom: 10px;
   border-radius: 15px;
@@ -46,6 +55,7 @@ const Img = styled.img`
 
 const Title = styled.h1`
   font-size: 48px;
+  font-weight: 500;
   color: ${(props) => props.theme.accentColor};
 `
 
@@ -66,15 +76,20 @@ interface ICoin {
 
 function Coins() {
   const { isLoading, data } = useQuery<ICoin[]>('allCoins', fetchCoins)
+  const context = useContext(ThemeContext)
 
   return (
     <Container>
       <Helmet>
-        <title>코인</title>
+        <title>Crypto Tracker</title>
       </Helmet>
       <Header>
-        <Title>코인</Title>
+        <Title>Crypto Tracker</Title>
       </Header>
+      <ToggleSwitchWarapper>
+        <ToggleSwitch onToggle={context.toggleTheme} />
+      </ToggleSwitchWarapper>
+
       {isLoading ? (
         <Loader>Loading...</Loader>
       ) : (
