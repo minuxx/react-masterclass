@@ -1,11 +1,12 @@
 import { useQuery } from 'react-query'
 import {
   Link,
+  Outlet,
   Route,
-  Switch,
+  Routes,
   useLocation,
+  useMatch,
   useParams,
-  useRouteMatch,
 } from 'react-router-dom'
 import styled from 'styled-components'
 import { Helmet } from 'react-helmet'
@@ -108,8 +109,10 @@ interface RouterParams {
   coinId: string
 }
 
-interface RouteState {
-  name: string
+interface ILocationState {
+  state: {
+    name: string
+  }
 }
 
 interface IInfoData {
@@ -159,18 +162,19 @@ interface IPriceData {
 }
 
 function Coin() {
-  const { coinId } = useParams<RouterParams>()
-  const { state } = useLocation<RouteState>()
+  const { coinId } = useParams() as unknown as RouterParams
+  const { state } = useLocation() as ILocationState
   const context = useContext(ThemeContext)
-  const chartMatch = useRouteMatch('/:coinId/chart')
-  const priceMatch = useRouteMatch('/:coinId/price')
+  const chartMatch = useMatch('/:coinId/chart')
+  const priceMatch = useMatch('/:coinId/price')
+
   const { isLoading: infoLoading, data: infoData } = useQuery<IInfoData>(
     ['info', coinId],
-    () => fetchCoinInfo(coinId)
+    () => fetchCoinInfo(coinId ?? '')
   )
   const { isLoading: tickersLoading, data: tickersData } = useQuery<IPriceData>(
     ['tickers', coinId],
-    () => fetchCoinTickers(coinId)
+    () => fetchCoinTickers(coinId ?? '')
   )
 
   const loading = infoLoading || tickersLoading
@@ -179,7 +183,7 @@ function Coin() {
     <Container>
       <Helmet>
         <title>
-          {state?.name ? state.name : loading ? 'Loading...' : infoData?.name}
+          {state.name ? state.name : loading ? 'Loading...' : infoData?.name}
         </title>
       </Helmet>
       <Header>
@@ -187,7 +191,7 @@ function Coin() {
           <Link to="/">〈</Link>
         </BackBtn>
         <Title>
-          {state?.name ? state.name : loading ? 'Loading...' : infoData?.name}
+          {state.name ? state.name : loading ? 'Loading...' : infoData?.name}
         </Title>
         <ToggleSwitch onToggle={context.toggleTheme} />
       </Header>
@@ -224,21 +228,18 @@ function Coin() {
 
           <Tabs>
             <Tab isActive={chartMatch !== null}>
-              <Link to={`/${coinId}/chart`}>Chart</Link>
+              <Link to={`/${coinId}/chart`} state={{ name: state.name }}>
+                Chart
+              </Link>
             </Tab>
             <Tab isActive={priceMatch !== null}>
-              <Link to={`/${coinId}/price`}>Price</Link>
+              <Link to={`/${coinId}/price`} state={{ name: state.name }}>
+                Price
+              </Link>
             </Tab>
           </Tabs>
 
-          <Switch>
-            <Route path={`/${coinId}/price`}>
-              <Price coinId={coinId} />
-            </Route>
-            <Route path={`/${coinId}/chart`}>
-              <Chart coinId={coinId} />
-            </Route>
-          </Switch>
+          <Outlet />
         </>
       )}
     </Container>

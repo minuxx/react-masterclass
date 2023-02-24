@@ -1,6 +1,7 @@
 import { useQuery } from 'react-query'
 import { fetchCoinTickers } from '../api'
 import styled from 'styled-components'
+import { useParams } from 'react-router-dom'
 
 const Table = styled.table`
   width: 100%;
@@ -32,10 +33,17 @@ interface IPriceData {
   }
 }
 
-function Price({ coinId }: IPriceProps) {
+interface RouterParams {
+  coinId: string
+}
+
+function Price() {
+  const { coinId } = useParams() as unknown as RouterParams
   const { isLoading, data } = useQuery<IPriceData>(['price', coinId], () =>
     fetchCoinTickers(coinId)
   )
+
+  console.log(coinId)
 
   return (
     <div>

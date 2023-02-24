@@ -1,6 +1,7 @@
 import { useQuery } from 'react-query'
 import { fetchCoinHistory } from '../api'
 import ApexChart from 'react-apexcharts'
+import { useParams } from 'react-router-dom'
 
 interface CoinProps {
   coinId: string
@@ -17,7 +18,12 @@ interface IHistorical {
   market_cap: number
 }
 
-function Chart({ coinId }: CoinProps) {
+interface RouterParams {
+  coinId: string
+}
+
+function Chart() {
+  const { coinId } = useParams() as unknown as RouterParams
   const { isLoading, data } = useQuery<IHistorical[]>(['ohlcv', coinId], () =>
     fetchCoinHistory(coinId)
   )
@@ -31,17 +37,15 @@ function Chart({ coinId }: CoinProps) {
           type="candlestick"
           series={[
             {
-              data: data
-                ? data?.map((price) => {
-                    return [
-                      Number(price.time_close),
-                      Number(price.open),
-                      Number(price.high),
-                      Number(price.low),
-                      Number(price.close),
-                    ]
-                  })
-                : [],
+              data: exceptData.map((price) => {
+                return [
+                  Number(price.time_close),
+                  Number(price.open),
+                  Number(price.high),
+                  Number(price.low),
+                  Number(price.close),
+                ]
+              }),
             },
           ]}
           options={{
