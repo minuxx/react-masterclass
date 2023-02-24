@@ -21,18 +21,27 @@ function Chart({ coinId }: CoinProps) {
   const { isLoading, data } = useQuery<IHistorical[]>(['ohlcv', coinId], () =>
     fetchCoinHistory(coinId)
   )
-  console.log(data)
+
   return (
     <div>
       {isLoading ? (
         'Loading chart...'
       ) : (
         <ApexChart
-          type="line"
+          type="candlestick"
           series={[
             {
-              name: 'Price',
-              data: data ? data?.map((price) => price.close) : [],
+              data: data
+                ? data?.map((price) => {
+                    return [
+                      Number(price.time_close),
+                      Number(price.open),
+                      Number(price.high),
+                      Number(price.low),
+                      Number(price.close),
+                    ]
+                  })
+                : [],
             },
           ]}
           options={{
@@ -40,7 +49,8 @@ function Chart({ coinId }: CoinProps) {
               mode: 'dark',
             },
             chart: {
-              height: 300,
+              type: 'candlestick',
+              height: 400,
               width: 500,
               toolbar: {
                 show: false,
@@ -50,7 +60,7 @@ function Chart({ coinId }: CoinProps) {
             grid: { show: false },
             stroke: {
               curve: 'smooth',
-              width: 5,
+              width: 2,
             },
             yaxis: {
               show: false,
@@ -64,14 +74,12 @@ function Chart({ coinId }: CoinProps) {
                 new Date(parseInt(price.time_close) * 1000).toISOString()
               ),
             },
-            fill: {
-              type: 'gradient',
-              gradient: { gradientToColors: ['#00cec9'], stops: [0, 100] },
-            },
-            colors: ['#0984e3'],
-            tooltip: {
-              y: {
-                formatter: (value) => `$${value.toFixed(3)}`,
+            plotOptions: {
+              candlestick: {
+                colors: {
+                  upward: '#4796ea',
+                  downward: '#e54720',
+                },
               },
             },
           }}
