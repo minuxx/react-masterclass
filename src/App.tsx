@@ -64,24 +64,25 @@ const GlobalStyle = createGlobalStyle`
 `
 
 function App() {
-  const [themeMode, setThemeMode] = useState(
-    window.localStorage.getItem('themeMode') || 'light'
+  const [isDarkTheme, setIsDarkTheme] = useState(
+    window.localStorage.getItem('themeMode') === 'dark' || false
   )
 
   const toggleTheme = () => {
-    const newThemeMode = themeMode === 'light' ? 'dark' : 'light'
-    window.localStorage.setItem('themeMode', newThemeMode)
-    setThemeMode(newThemeMode)
+    window.localStorage.setItem('themeMode', isDarkTheme ? 'light' : 'dark')
+    setIsDarkTheme((current) => !current)
   }
 
   return (
-    <ThemeContext.Provider value={{ themeMode, toggleTheme }}>
-      <ThemeProvider theme={themeMode === 'light' ? lightTheme : darkTheme}>
-        <GlobalStyle />
-        <Router />
-        <ReactQueryDevtools initialIsOpen={true} />
-      </ThemeProvider>
-    </ThemeContext.Provider>
+    <>
+      <ThemeContext.Provider value={{ toggleTheme }}>
+        <ThemeProvider theme={isDarkTheme ? lightTheme : darkTheme}>
+          <GlobalStyle />
+          <Router />
+          <ReactQueryDevtools initialIsOpen={true} />
+        </ThemeProvider>
+      </ThemeContext.Provider>
+    </>
   )
 }
 

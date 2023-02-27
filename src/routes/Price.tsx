@@ -16,10 +16,6 @@ const Table = styled.table`
   }
 `
 
-interface IPriceProps {
-  coinId: string
-}
-
 interface IPriceData {
   quotes: {
     USD: {
@@ -42,8 +38,6 @@ function Price() {
   const { isLoading, data } = useQuery<IPriceData>(['price', coinId], () =>
     fetchCoinTickers(coinId)
   )
-
-  console.log(coinId)
 
   return (
     <div>

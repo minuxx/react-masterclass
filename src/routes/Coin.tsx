@@ -2,8 +2,6 @@ import { useQuery } from 'react-query'
 import {
   Link,
   Outlet,
-  Route,
-  Routes,
   useLocation,
   useMatch,
   useParams,
@@ -11,8 +9,6 @@ import {
 import styled from 'styled-components'
 import { Helmet } from 'react-helmet'
 import { fetchCoinInfo, fetchCoinTickers } from '../api'
-import Chart from './Chart'
-import Price from './Price'
 import { useContext } from 'react'
 import { ThemeContext } from '../contexts'
 import ToggleSwitch from '../components/ToggleSwitch'
