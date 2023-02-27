@@ -28,6 +28,8 @@ function Chart() {
     fetchCoinHistory(coinId)
   )
 
+  const exceptData = data ?? []
+
   return (
     <div>
       {isLoading ? (
