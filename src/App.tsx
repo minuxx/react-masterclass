@@ -2,9 +2,8 @@ import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import Router from './Router'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import { darkTheme, lightTheme } from './theme'
-import { useState } from 'react'
-import { ThemeContext } from './contexts'
-import { useRecoilValue } from 'recoil'
+import { useEffect, useState } from 'react'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { isDarkAtom } from './routes/atoms'
 
 const GlobalStyle = createGlobalStyle`
@@ -68,24 +67,21 @@ const GlobalStyle = createGlobalStyle`
 
 function App() {
   const isDark = useRecoilValue(isDarkAtom)
-  const [isDarkTheme, setIsDarkTheme] = useState(
-    window.localStorage.getItem('themeMode') === 'dark' || false
-  )
+  const setDarkAtom = useSetRecoilState(isDarkAtom)
 
-  const toggleTheme = () => {
-    window.localStorage.setItem('themeMode', isDarkTheme ? 'light' : 'dark')
-    setIsDarkTheme((current) => !current)
-  }
+  useEffect(() => {
+    const themeMode =
+      window.localStorage.getItem('themeMode') === 'dark' || false
+    setDarkAtom(themeMode)
+  }, [])
 
   return (
     <>
-      <ThemeContext.Provider value={{ toggleTheme }}>
-        <ThemeProvider theme={isDarkTheme ? lightTheme : darkTheme}>
-          <GlobalStyle />
-          <Router />
-          <ReactQueryDevtools initialIsOpen={true} />
-        </ThemeProvider>
-      </ThemeContext.Provider>
+      <ThemeProvider theme={isDark ? lightTheme : darkTheme}>
+        <GlobalStyle />
+        <Router />
+        <ReactQueryDevtools initialIsOpen={true} />
+      </ThemeProvider>
     </>
   )
 }

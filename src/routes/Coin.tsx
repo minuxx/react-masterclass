@@ -10,8 +10,9 @@ import styled from 'styled-components'
 import { Helmet } from 'react-helmet'
 import { fetchCoinInfo, fetchCoinTickers } from '../api'
 import { useContext } from 'react'
-import { ThemeContext } from '../contexts'
 import ToggleSwitch from '../components/ToggleSwitch'
+import { useSetRecoilState } from 'recoil'
+import { isDarkAtom } from './atoms'
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -160,7 +161,7 @@ interface IPriceData {
 function Coin() {
   const { coinId } = useParams() as unknown as RouterParams
   const { state } = useLocation() as ILocationState
-  const context = useContext(ThemeContext)
+  const setterFn = useSetRecoilState(isDarkAtom)
   const chartMatch = useMatch('/:coinId/chart')
   const priceMatch = useMatch('/:coinId/price')
 
@@ -189,7 +190,7 @@ function Coin() {
         <Title>
           {state.name ? state.name : loading ? 'Loading...' : infoData?.name}
         </Title>
-        <ToggleSwitch onToggle={context.toggleTheme} />
+        <ToggleSwitch onToggle={() => setterFn((prev) => !prev)} />
       </Header>
 
       {loading ? (

@@ -4,8 +4,8 @@ import styled from 'styled-components'
 import { Helmet } from 'react-helmet'
 import { fetchCoins } from '../api'
 import ToggleSwitch from '../components/ToggleSwitch'
-import { useContext } from 'react'
-import { ThemeContext } from '../contexts'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { isDarkAtom } from './atoms'
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -70,7 +70,13 @@ interface ICoin {
 
 function Coins() {
   const { isLoading, data } = useQuery<ICoin[]>('allCoins', fetchCoins)
-  const context = useContext(ThemeContext)
+  const isDark = useRecoilValue(isDarkAtom)
+  const setDarkAtom = useSetRecoilState(isDarkAtom)
+
+  const toggleDarkAtom = () => {
+    window.localStorage.setItem('themeMode', isDark ? 'light' : 'dark')
+    setDarkAtom((prev) => !prev)
+  }
 
   return (
     <Container>
@@ -80,7 +86,7 @@ function Coins() {
       <Header>
         <span></span>
         <Title>Crypto Tracker</Title>
-        <ToggleSwitch onToggle={context.toggleTheme} />
+        <ToggleSwitch onToggle={toggleDarkAtom} />
       </Header>
 
       {isLoading ? (
