@@ -4,9 +4,12 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 import { darkTheme, lightTheme } from './theme'
 import { useState } from 'react'
 import { ThemeContext } from './contexts'
+import { useRecoilValue } from 'recoil'
+import { isDarkAtom } from './routes/atoms'
 
 const GlobalStyle = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500&display=swap');html, body, div, span, applet, object, iframe,
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500&display=swap');
+  html, body, div, span, applet, object, iframe,
   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
   a, abbr, acronym, address, big, cite, code,
   del, dfn, em, img, ins, kbd, q, s, samp,
@@ -64,6 +67,7 @@ const GlobalStyle = createGlobalStyle`
 `
 
 function App() {
+  const isDark = useRecoilValue(isDarkAtom)
   const [isDarkTheme, setIsDarkTheme] = useState(
     window.localStorage.getItem('themeMode') === 'dark' || false
   )
