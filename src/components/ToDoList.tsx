@@ -1,11 +1,26 @@
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { Categories, categoryState, toDoSelector } from '../atoms'
+import styled from 'styled-components'
+import { categoriesState, categoryState, toDoSelector } from '../atoms'
+import CreateToCategory from './CreateCategory'
 import CreateToDo from './CreateToDo'
 import ToDo from './ToDo'
+
+const InputFormWrapper = styled.div`
+  display: flex;
+
+  form + form {
+    margin-left: 10px;
+
+    input {
+      width: 100px;
+    }
+  }
+`
 
 function ToDoList() {
   const toDos = useRecoilValue(toDoSelector) // 반환된 세 개의 배열을 각각 받는다.
   const [category, setCategory] = useRecoilState(categoryState)
+  const categories = useRecoilValue(categoriesState)
 
   const onInput = (event: React.FormEvent<HTMLSelectElement>) => {
     const {
@@ -21,13 +36,18 @@ function ToDoList() {
 
       <form>
         <select value={category} onInput={onInput}>
-          <option value={Categories.TO_DO}>To Do</option>
-          <option value={Categories.DOING}>Doing</option>
-          <option value={Categories.DONE}>Done</option>
+          {categories.map((category, index) => (
+            <option key={index} value={category}>
+              {category}
+            </option>
+          ))}
         </select>
       </form>
 
-      <CreateToDo />
+      <InputFormWrapper>
+        <CreateToDo />
+        <CreateToCategory />
+      </InputFormWrapper>
 
       {toDos?.map((toDo) => (
         <ToDo key={toDo.id} {...toDo} />
