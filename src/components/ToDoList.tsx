@@ -23,7 +23,7 @@ function ToDoList() {
         <select value={category} onInput={onInput}>
           <option value={Categories.TO_DO}>To Do</option>
           <option value={Categories.DOING}>Doing</option>
-          <option value={Categories.TO_DO}>Done</option>
+          <option value={Categories.DONE}>Done</option>
         </select>
       </form>
 
