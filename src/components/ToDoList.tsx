@@ -1,11 +1,10 @@
 import { useRecoilValue } from 'recoil'
-import { toDoState } from '../atoms'
+import { toDoSelector, toDoState } from '../atoms'
 import CreateToDo from './CreateToDo'
 import ToDo from './ToDo'
 
 function ToDoList() {
-  const toDos = useRecoilValue(toDoState)
-  console.log(toDos)
+  const [toDo, doing, done] = useRecoilValue(toDoSelector) // 반환된 세 개의 배열을 각각 받는다.
 
   return (
     <div>
@@ -13,11 +12,29 @@ function ToDoList() {
       <hr />
 
       <CreateToDo />
+      <h2>To Do</h2>
       <ul>
-        {toDos.map((toDo) => (
+        {toDo.map((toDo) => (
           <ToDo key={toDo.id} {...toDo} />
         ))}
       </ul>
+      <hr />
+
+      <h2>Doing</h2>
+      <ul>
+        {doing.map((toDo) => (
+          <ToDo key={toDo.id} {...toDo} />
+        ))}
+      </ul>
+      <hr />
+
+      <h2>Done</h2>
+      <ul>
+        {done.map((toDo) => (
+          <ToDo key={toDo.id} {...toDo} />
+        ))}
+      </ul>
+      <hr />
     </div>
   )
 }
