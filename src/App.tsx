@@ -43,15 +43,15 @@ const Box = styled(motion.div)`
 
 function App() {
   const x = useMotionValue(0)
-  const transScale = useTransform(x, [-800, 0, 800], [2, 1, 0]) // motionValue, input, output
+  const scale = useTransform(x, [-800, 0, 800], [2, 1, 0]) // motionValue, input, output
 
-  useMotionValueEvent(transScale, 'change', (scale) => {
-    console.log(scale)
+  useMotionValueEvent(scale, 'change', (s) => {
+    console.log(s)
   })
 
   return (
     <Wrapper>
-      <Box style={{ x, scale: transScale }} drag="x" dragSnapToOrigin />
+      <Box style={{ x, scale }} drag="x" dragSnapToOrigin />
     </Wrapper>
   )
 }
