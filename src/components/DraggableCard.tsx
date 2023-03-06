@@ -1,6 +1,7 @@
 import React from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import styled from 'styled-components'
+import { IToDo } from '../atoms'
 
 const Card = styled.div<{ isDragging: boolean }>`
   border-radius: 5px;
@@ -12,13 +13,14 @@ const Card = styled.div<{ isDragging: boolean }>`
     props.isDragging ? '0px 2px 10px rgba(0,0,0, 0.5)' : 'none'};
 `
 interface IDragableCardProps {
-  toDo: string
+  toDoId: number
+  toDoText: string
   index: number
 }
 
-function DraggableCard({ toDo, index }: IDragableCardProps) {
+function DraggableCard({ toDoId, toDoText, index }: IDragableCardProps) {
   return (
-    <Draggable key={toDo} draggableId={toDo} index={index}>
+    <Draggable key={toDoId} draggableId={String(toDoId)} index={index}>
       {(provided, snapshot) => (
         <Card
           isDragging={snapshot.isDragging}
@@ -26,7 +28,7 @@ function DraggableCard({ toDo, index }: IDragableCardProps) {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          {toDo}
+          {toDoText}
         </Card>
       )}
     </Draggable>

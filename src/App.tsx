@@ -31,8 +31,11 @@ function App() {
     if (destination.droppableId === source.droppableId) {
       setToDos((allBoards) => {
         const boardCopy = [...allBoards[source.droppableId]]
+        const item = allBoards[source.droppableId].find(
+          (i) => i.id === Number(draggableId)
+        )
         boardCopy.splice(source.index, 1)
-        boardCopy.splice(destination?.index, 0, draggableId)
+        boardCopy.splice(destination?.index, 0, item)
         return {
           ...allBoards,
           [source.droppableId]: boardCopy,
