@@ -26,7 +26,9 @@ function App() {
   const [toDos, setToDos] = useRecoilState(toDoState)
   const onDragEnd = (info: DropResult) => {
     const { draggableId, destination, source } = info
-    if (destination?.droppableId === source.droppableId) {
+    if (!destination) return
+
+    if (destination.droppableId === source.droppableId) {
       setToDos((allBoards) => {
         const boardCopy = [...allBoards[source.droppableId]]
         boardCopy.splice(source.index, 1)
@@ -37,8 +39,20 @@ function App() {
         }
       })
     }
-    // if (!destination) return // 같은 자리에 놓을 때
-    //
+
+    if (destination.droppableId !== source.droppableId) {
+      setToDos((allBoards) => {
+        const sourceBoardCopy = [...allBoards[source.droppableId]]
+        const destinationBoardCopy = [...allBoards[destination.droppableId]]
+        sourceBoardCopy.splice(source.index, 1)
+        destinationBoardCopy.splice(destination?.index, 0, draggableId)
+        return {
+          ...allBoards,
+          [source.droppableId]: sourceBoardCopy,
+          [destination.droppableId]: destinationBoardCopy,
+        }
+      })
+    }
   }
 
   return (
