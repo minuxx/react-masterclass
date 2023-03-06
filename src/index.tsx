@@ -69,6 +69,11 @@ const GlobalStyle = createGlobalStyle`
     text-decoration:none;
     color:inherit;
   }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: ${(props) => props.theme.bgColor};
+    color: black
+  }
 `
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
