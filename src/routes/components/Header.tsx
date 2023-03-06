@@ -1,16 +1,20 @@
 import { Link, useMatch } from 'react-router-dom'
 import styled from 'styled-components'
-import { motion } from 'framer-motion'
+import {
+  motion,
+  useAnimation,
+  useMotionValueEvent,
+  useScroll,
+} from 'framer-motion'
 import { useState } from 'react'
 
-const Nav = styled.nav`
+const Nav = styled(motion.nav)`
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: fixed;
   width: 100%;
   top: 0;
-  background-color: black;
   font-size: 14px;
   padding: 20px 60px;
   color: white;
@@ -86,20 +90,59 @@ const logVariants = {
 }
 
 const Input = styled(motion.input)`
-  transform-origin: right center; // 변화의 시작이 어디인지
+  transform-origin: right center;
   position: absolute;
-  left: -150px;
+  right: 0px;
+  padding: 5px 10px;
+  padding-left: 35px;
+  z-index: -1;
+  color: white;
+  font-size: 16px;
+  background-color: transparent;
+  border: 1px solid ${(props) => props.theme.white.lighter};
 `
+
+const navVariants = {
+  top: {
+    backgroundColor: 'rgba(0,0,0,0)',
+  },
+  scroll: {
+    backgroundColor: 'rgba(0,0,0,1)',
+  },
+}
 
 function Header() {
   const [searchOpen, setSearchOpen] = useState(false)
   const homeMatch = useMatch('/')
   const tvMatch = useMatch('/tv')
+  const inputAnimation = useAnimation() // animation을 코드를 통해 실행/중지시키고 싶을 때
+  const navAnimation = useAnimation()
+  const { scrollY } = useScroll()
 
-  const openSearch = () => setSearchOpen((prev) => !prev)
+  useMotionValueEvent(scrollY, 'change', (y) => {
+    if (y > 80) {
+      navAnimation.start('scroll')
+    } else {
+      navAnimation.start('top')
+    }
+  })
+
+  const toggleSearch = () => {
+    if (searchOpen) {
+      inputAnimation.start({
+        scaleX: 0,
+      })
+    } else {
+      inputAnimation.start({
+        scaleX: 1,
+      })
+    }
+    setSearchOpen((prev) => !prev)
+  }
 
   return (
-    <Nav>
+    <Nav variants={navVariants} initial="top" animate={navAnimation}>
+      {/* 혹은 animate={{backgroundColor: scrollY > 80 ? "Color 1" : "Color 2"}}*/}
       <Col>
         <Logo
           variants={logVariants}
@@ -126,8 +169,9 @@ function Header() {
         </Items>
       </Col>
       <Col>
-        <Search onClick={openSearch}>
+        <Search>
           <motion.svg
+            onClick={toggleSearch}
             animate={{ x: searchOpen ? -180 : 0 }}
             transition={{ type: 'linear' }}
             fill="currentColor"
@@ -141,7 +185,8 @@ function Header() {
             ></path>
           </motion.svg>
           <Input
-            animate={{ scaleX: searchOpen ? 1 : 0 }}
+            animate={inputAnimation}
+            initial={{ scaleX: 0 }}
             transition={{ type: 'linear' }}
             placeholder="Search for movie or tv show..."
           />
