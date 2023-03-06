@@ -7,8 +7,7 @@ import Board from './components/Board'
 
 const Wrapper = styled.div`
   display: flex;
-  max-width: 680px;
-  width: 100%;
+  width: 100vw;
   margin: 0 auto;
   justify-content: center;
   align-items: center;
@@ -16,24 +15,30 @@ const Wrapper = styled.div`
 `
 
 const Boards = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   width: 100%;
   gap: 10px;
 `
 
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState)
-  const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
+  const onDragEnd = (info: DropResult) => {
+    const { draggableId, destination, source } = info
+    if (destination?.droppableId === source.droppableId) {
+      setToDos((allBoards) => {
+        const boardCopy = [...allBoards[source.droppableId]]
+        boardCopy.splice(source.index, 1)
+        boardCopy.splice(destination?.index, 0, draggableId)
+        return {
+          ...allBoards,
+          [source.droppableId]: boardCopy,
+        }
+      })
+    }
     // if (!destination) return // 같은 자리에 놓을 때
-    // setToDos((oldToDos) => {
-    //   const toDosCopy = [...oldToDos]
-    //   // 1) Delete item on source.index
-    //   toDosCopy.splice(source.index, 1)
-    //   // 2) Put back the item on the destination.index
-    //   toDosCopy.splice(destination?.index, 0, draggableId)
-    //   return toDosCopy
-    // })
+    //
   }
 
   return (
