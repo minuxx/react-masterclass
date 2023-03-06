@@ -59,6 +59,12 @@ const Box = styled(motion.div)<{ bgPhoto: string }>`
   height: 200px;
   color: red;
   font-size: 66px;
+  &:first-child {
+    transform-origin: center left;
+  }
+  &:last-child {
+    transform-origin: center right;
+  }
 `
 
 const rowVariants = {
@@ -70,6 +76,20 @@ const rowVariants = {
   },
   exit: {
     x: -window.innerWidth - 5,
+  },
+}
+
+const boxVariants = {
+  noraml: {
+    scale: 1,
+  },
+  hover: {
+    scale: 1.3,
+    y: -50,
+    transition: {
+      type: 'tween',
+      delay: 0.3,
+    },
   },
 }
 
@@ -88,7 +108,7 @@ function Home() {
       if (leaving) return
       toggleLeaving()
       const totalMovies = data?.results.length - 1 // 하나는 배너
-      const maxIndex = Math.ceil(totalMovies / offset) - 1 // 올림, 0부터 시작하니 -1
+      const maxIndex = Math.floor(totalMovies / offset) - 1 // 올림, 0부터 시작하니 -1
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1))
     }
   }
@@ -124,6 +144,10 @@ function Home() {
                   .map((movie) => (
                     <Box
                       key={movie.id}
+                      variants={boxVariants}
+                      initial="normal"
+                      whileHover="hover"
+                      transition={{ type: 'tween' }}
                       bgPhoto={makeImagePath(movie.backdrop_path, 'w500')}
                     />
                   ))}
