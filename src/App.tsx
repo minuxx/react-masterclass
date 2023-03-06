@@ -7,6 +7,7 @@ import {
 import styled from 'styled-components'
 import { useRecoilState } from 'recoil'
 import { toDoState } from './atoms'
+import DraggableCard from './components/DraggableCard'
 
 const Wrapper = styled.div`
   display: flex;
@@ -32,24 +33,17 @@ const Board = styled.div`
   min-height: 200px;
 `
 
-const Card = styled.div`
-  border-radius: 5px;
-  margin-bottom: 5px;
-  padding: 10px 10px;
-  background-color: ${(props) => props.theme.cardColor};
-`
-
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState)
   const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
     if (!destination) return // 같은 자리에 놓을 때
     setToDos((oldToDos) => {
-      const copyToDos = [...oldToDos]
+      const toDosCopy = [...oldToDos]
       // 1) Delete item on source.index
-      copyToDos.splice(source.index, 1)
+      toDosCopy.splice(source.index, 1)
       // 2) Put back the item on the destination.index
-      copyToDos.splice(destination?.index, 0, draggableId)
-      return copyToDos
+      toDosCopy.splice(destination?.index, 0, draggableId)
+      return toDosCopy
     })
   }
 
@@ -61,18 +55,7 @@ function App() {
             {(provided) => (
               <Board ref={provided.innerRef} {...provided.droppableProps}>
                 {toDos.map((toDo, index) => (
-                  // key 와 draggableId 는 같아야 한다.
-                  <Draggable key={toDo} draggableId={toDo} index={index}>
-                    {(provided) => (
-                      <Card
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                      >
-                        {toDo}
-                      </Card>
-                    )}
-                  </Draggable>
+                  <DraggableCard key={toDo} toDo={toDo} index={index} />
                 ))}
                 {/* board 의 사이즈를 고정해주는 역할 */}
                 {provided.placeholder}
