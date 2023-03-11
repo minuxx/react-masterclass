@@ -142,6 +142,7 @@ const boxVariants = {
   noraml: {
     scale: 1,
   },
+
   hover: {
     scale: 1.3,
     y: -80,
